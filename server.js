@@ -5,7 +5,7 @@ const dbConnect = require("./config/db");
 const userRoute = require("./routes/UserRoutes");
 const AnalyticsRoutes = require("./routes/AnalyticsRoutes");
 const TaskRoutes = require("./routes/TaskRoutes")
-
+const BoardRoutes = require("./routes/BoardRoutes")
 const PORT = process.env.PORT || 3000
 
 const app = express();
@@ -17,6 +17,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/auth",userRoute);
 app.use("/api/v1/task",TaskRoutes)
+app.use("/api/v1/board",BoardRoutes)
 app.use("/api/v1/analytics",AnalyticsRoutes)
 
 

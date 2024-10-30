@@ -1,5 +1,6 @@
 const Task = require("../models/Task-model");
 const User = require("../models/User-model");
+const Board = require("../models/Board-model")
 const moment = require("moment");
 
 exports.createTask = async (req, res) => {
@@ -11,6 +12,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       checklist,
       assignedTo,
+      boardId
     } = req.body;
 
 
@@ -31,6 +33,14 @@ exports.createTask = async (req, res) => {
       });
     }
 
+
+    let board = null;
+    if (boardId) {
+      board = await Board.findById(boardId);
+      if (!board) {
+        return res.status(404).json({ message: "Board not found." });
+      }
+    }
   
 
     const task = new Task({
@@ -44,6 +54,12 @@ exports.createTask = async (req, res) => {
     });
 
     const savedTask = await task.save();
+
+
+    if (board) {
+      board.tasks.push(savedTask._id);
+      await board.save();
+    }
 
     const user = await User.findById(req.user.id);
     user.tasks.push(savedTask.id);
@@ -66,7 +82,7 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
   try {
-    const { priority, dueDateRange } = req.query;
+    const {boardId,priority, dueDateRange } = req.query;
     const userId = req.user.id;
 
 
@@ -75,6 +91,10 @@ exports.getTasks = async (req, res) => {
 
     if (priority) {
       query.priority = priority;
+    }
+
+    if (boardId) {
+      query.board = boardId;
     }
 
     if (dueDateRange) {
@@ -207,6 +227,8 @@ exports.deleteTask = async (req, res) => {
       message: "Task Deleted Successfully",
       deletedTask,
     });
+
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({

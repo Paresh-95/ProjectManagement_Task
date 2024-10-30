@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
       ref: "Task",
     },
   ],
+  boards:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Board"
+    }
+  ]
 },{
   timestamps:true
 });
