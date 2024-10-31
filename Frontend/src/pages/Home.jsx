@@ -1,0 +1,209 @@
+import React, { useState } from 'react';
+import { LuUsers2 } from "react-icons/lu";
+import { VscCollapseAll } from "react-icons/vsc";
+import { GoPlus } from "react-icons/go";
+import Sidebar from '../components/Sidebar';
+import TaskCard from '../components/TaskCard';
+
+export default function Dashboard() {
+  const today = new Date().toLocaleDateString("en-US", {
+    day: 'numeric',
+    month: 'short', 
+    year: 'numeric',
+  });
+
+  const [collapsedBoards, setCollapsedBoards] = useState({
+    backlog: false,
+    todo: false,
+    inProgress: false,
+    done: false,
+  });
+
+  const toggleCollapse = (board) => {
+    setCollapsedBoards((prevState) => ({
+      ...prevState,
+      [board]: !prevState[board],
+    }));
+  };
+
+  return (
+    <div style={styles.container}>
+      <Sidebar activePage="dashboard" />
+      <main style={styles.main}>
+        <header style={styles.header}>
+          <h1 style={styles.welcomeText}>Welcome! Kumar</h1>
+          <span style={styles.dateText}>{today}</span>
+        </header>
+        
+        <div style={styles.boardHeader}>
+          <h2 style={styles.boardTitle}>Board</h2>
+          <button style={styles.addPeopleButton}>
+            <LuUsers2 /> Add People
+          </button>
+          <div style={styles.filterContainer}>
+            <select style={styles.filterSelect}>
+              <option value="today">Today</option>
+              <option value="thisWeek">This Week</option>
+              <option value="thisMonth">This Month</option>
+            </select>
+          </div>
+        </div>
+
+        <div style={styles.board}>
+          {[
+            { name: 'Backlog', key: 'backlog' },
+            { name: 'To do', key: 'todo' },
+            { name: 'In progress', key: 'inProgress' },
+            { name: 'Done', key: 'done' },
+          ].map((column) => (
+            <div key={column.key} style={styles.column}>
+              <div style={styles.columnHeader}>
+                <h3 style={styles.columnTitle}>{column.name}</h3>
+                
+                {/* Container for both icons */}
+                <div style={styles.iconContainer}>
+                  {column.key === 'todo' && (
+                    <GoPlus style={styles.plusIcon} />
+                  )}
+                  <VscCollapseAll
+                    style={styles.collapseIcon}
+                    onClick={() => toggleCollapse(column.key)}
+                  />
+                </div>
+              </div>
+
+              {!collapsedBoards[column.key] && (
+                <div style={styles.cardList}>
+                  {['HIGH', 'MODERATE'].map((priority) => (
+                    <TaskCard key={priority} priority={priority} />
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+   
+    display: 'flex',
+    height: '100vh',
+    
+  },
+  main: {
+    flex: 1,
+    padding: '5px 20px 20px 20px',
+    overflowY: 'auto',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  welcomeText: {
+    fontSize: '22px',          
+    fontWeight: 600,           
+    lineHeight: '33px',         
+    textAlign: 'left',         
+  },
+  dateText: {
+    marginLeft: '10px',
+    color: '#707070',
+    fontFamily: 'Poppins',
+    fontSize: '20px',
+    fontWeight: 500,
+    lineHeight: '30px',
+    textAlign: 'left',
+  },
+  boardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '20px',
+  },
+  boardTitle: {
+    fontSize: '29px',
+    fontWeight: 500,
+    lineHeight: '43.5px',
+    textAlign: 'left',
+    marginRight: '5px',
+  },
+  addPeopleButton: {
+    backgroundColor: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '5px 10px',
+    fontSize:'15px',
+    cursor: 'pointer',
+    color : '#707070',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+    marginRight: '10px', 
+  },
+  filterContainer: {
+    marginLeft: 'auto', 
+  },
+  filterSelect: {
+    padding: '5px',
+    borderRadius: '5px',
+    border: 'none',
+    fontFamily: 'Poppins',
+    fontSize: '16px',
+    fontWeight: '400',
+    lineHeight: '24px',
+    textAlign: 'center',
+},
+
+  board: {
+    display: 'flex',
+    gap: '15px',
+    maxWidth: '100%', 
+    overflowX: 'auto',
+  },
+  column: {
+    flex: 1,
+    backgroundColor: '#eef2f5',
+    borderRadius: '10px',
+    padding: '20px 35px 20px 20px',
+    minWidth: '320px',
+    maxWidth: '380px',
+    maxHeight: '80vh',
+    overflowY: 'auto',
+  },
+  columnHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+  },
+  columnTitle: {
+    fontSize: '16px',
+    fontWeight: 500,
+    lineHeight: '24px',
+    textAlign: 'left',
+  },
+  iconContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '18px',
+  },
+  plusIcon: {
+    fontSize: '25px',
+    color:'black',
+    
+  },
+  collapseIcon: {
+    fontSize: '20px',
+    cursor: 'pointer',
+    color: '#707070',
+  },
+  cardList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+};
