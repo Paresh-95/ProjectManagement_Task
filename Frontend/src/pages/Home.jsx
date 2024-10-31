@@ -4,11 +4,13 @@ import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
 import Sidebar from '../components/Sidebar';
 import TaskCard from '../components/TaskCard';
+import AddTask from '../components/AddTask';
 
 export default function Dashboard() {
+
   const today = new Date().toLocaleDateString("en-US", {
     day: 'numeric',
-    month: 'short', 
+    month: 'short',
     year: 'numeric',
   });
 
@@ -19,6 +21,11 @@ export default function Dashboard() {
     done: false,
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleTaskSubmit = (taskData) => {
+    console.log('New task:', taskData);
+
+  };
   const toggleCollapse = (board) => {
     setCollapsedBoards((prevState) => ({
       ...prevState,
@@ -34,7 +41,7 @@ export default function Dashboard() {
           <h1 style={styles.welcomeText}>Welcome! Kumar</h1>
           <span style={styles.dateText}>{today}</span>
         </header>
-        
+
         <div style={styles.boardHeader}>
           <h2 style={styles.boardTitle}>Board</h2>
           <button style={styles.addPeopleButton}>
@@ -59,11 +66,14 @@ export default function Dashboard() {
             <div key={column.key} style={styles.column}>
               <div style={styles.columnHeader}>
                 <h3 style={styles.columnTitle}>{column.name}</h3>
-                
+
                 {/* Container for both icons */}
                 <div style={styles.iconContainer}>
                   {column.key === 'todo' && (
-                    <GoPlus style={styles.plusIcon} />
+                    <GoPlus
+                      style={styles.plusIcon}
+                      onClick={() => setIsModalOpen(true)}
+                    />
                   )}
                   <VscCollapseAll
                     style={styles.collapseIcon}
@@ -83,16 +93,21 @@ export default function Dashboard() {
           ))}
         </div>
       </main>
+      <AddTask
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleTaskSubmit}
+      />
     </div>
   );
 }
 
 const styles = {
   container: {
-   
+
     display: 'flex',
     height: '100vh',
-    
+
   },
   main: {
     flex: 1,
@@ -105,10 +120,10 @@ const styles = {
     alignItems: 'center',
   },
   welcomeText: {
-    fontSize: '22px',          
-    fontWeight: 600,           
-    lineHeight: '33px',         
-    textAlign: 'left',         
+    fontSize: '22px',
+    fontWeight: 600,
+    lineHeight: '33px',
+    textAlign: 'left',
   },
   dateText: {
     marginLeft: '10px',
@@ -136,16 +151,16 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     padding: '5px 10px',
-    fontSize:'15px',
+    fontSize: '15px',
     cursor: 'pointer',
-    color : '#707070',
+    color: '#707070',
     display: 'flex',
     alignItems: 'center',
     gap: '5px',
-    marginRight: '10px', 
+    marginRight: '10px',
   },
   filterContainer: {
-    marginLeft: 'auto', 
+    marginLeft: 'auto',
   },
   filterSelect: {
     padding: '5px',
@@ -156,12 +171,12 @@ const styles = {
     fontWeight: '400',
     lineHeight: '24px',
     textAlign: 'center',
-},
+  },
 
   board: {
     display: 'flex',
     gap: '15px',
-    maxWidth: '100%', 
+    maxWidth: '100%',
     overflowX: 'auto',
   },
   column: {
@@ -193,8 +208,8 @@ const styles = {
   },
   plusIcon: {
     fontSize: '25px',
-    color:'black',
-    
+    color: 'black',
+
   },
   collapseIcon: {
     fontSize: '20px',
