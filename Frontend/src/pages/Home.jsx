@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, {  useEffect, useState } from "react";
 import { LuUsers2 } from "react-icons/lu";
 import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
-import Sidebar from '../components/Sidebar';
-import TaskCard from '../components/TaskCard';
-import AddTask from '../components/AddTask';
+import Sidebar from "../components/Sidebar";
+import TaskCard from "../components/TaskCard";
+import AddTask from "../components/AddTask";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+
+
 
 export default function Dashboard() {
+  const {user,getUser} = useContext(UserContext)
+  useEffect(() => {
+    getUser();
+  }, []);
 
   const today = new Date().toLocaleDateString("en-US", {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    day: "numeric",
+    month: "short",
+    year: "numeric",
   });
 
   const [collapsedBoards, setCollapsedBoards] = useState({
@@ -23,8 +31,7 @@ export default function Dashboard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleTaskSubmit = (taskData) => {
-    console.log('New task:', taskData);
-
+    console.log("New task:", taskData);
   };
   const toggleCollapse = (board) => {
     setCollapsedBoards((prevState) => ({
@@ -38,7 +45,7 @@ export default function Dashboard() {
       <Sidebar activePage="dashboard" />
       <main style={styles.main}>
         <header style={styles.header}>
-          <h1 style={styles.welcomeText}>Welcome! Kumar</h1>
+          <h1 style={styles.welcomeText}>Welcome! {user.name || " User"}</h1>
           <span style={styles.dateText}>{today}</span>
         </header>
 
@@ -58,10 +65,10 @@ export default function Dashboard() {
 
         <div style={styles.board}>
           {[
-            { name: 'Backlog', key: 'backlog' },
-            { name: 'To do', key: 'todo' },
-            { name: 'In progress', key: 'inProgress' },
-            { name: 'Done', key: 'done' },
+            { name: "Backlog", key: "backlog" },
+            { name: "To do", key: "todo" },
+            { name: "In progress", key: "inProgress" },
+            { name: "Done", key: "done" },
           ].map((column) => (
             <div key={column.key} style={styles.column}>
               <div style={styles.columnHeader}>
@@ -69,7 +76,7 @@ export default function Dashboard() {
 
                 {/* Container for both icons */}
                 <div style={styles.iconContainer}>
-                  {column.key === 'todo' && (
+                  {column.key === "todo" && (
                     <GoPlus
                       style={styles.plusIcon}
                       onClick={() => setIsModalOpen(true)}
@@ -84,7 +91,7 @@ export default function Dashboard() {
 
               {!collapsedBoards[column.key] && (
                 <div style={styles.cardList}>
-                  {['HIGH', 'MODERATE'].map((priority) => (
+                  {["HIGH", "MODERATE"].map((priority) => (
                     <TaskCard key={priority} priority={priority} />
                   ))}
                 </div>
@@ -104,121 +111,118 @@ export default function Dashboard() {
 
 const styles = {
   container: {
-
-    display: 'flex',
-    height: '100vh',
-
+    display: "flex",
+    height: "100vh",
   },
   main: {
     flex: 1,
-    padding: '5px 20px 20px 20px',
-    overflowY: 'auto',
+    padding: "5px 20px 20px 20px",
+    overflowY: "auto",
   },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   welcomeText: {
-    fontSize: '22px',
+    fontSize: "22px",
     fontWeight: 600,
-    lineHeight: '33px',
-    textAlign: 'left',
+    lineHeight: "33px",
+    textAlign: "left",
   },
   dateText: {
-    marginLeft: '10px',
-    color: '#707070',
-    fontFamily: 'Poppins',
-    fontSize: '20px',
+    marginLeft: "10px",
+    color: "#707070",
+    fontFamily: "Poppins",
+    fontSize: "20px",
     fontWeight: 500,
-    lineHeight: '30px',
-    textAlign: 'left',
+    lineHeight: "30px",
+    textAlign: "left",
   },
   boardHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '20px',
+    display: "flex",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   boardTitle: {
-    fontSize: '29px',
+    fontSize: "29px",
     fontWeight: 500,
-    lineHeight: '43.5px',
-    textAlign: 'left',
-    marginRight: '5px',
+    lineHeight: "43.5px",
+    textAlign: "left",
+    marginRight: "5px",
   },
   addPeopleButton: {
-    backgroundColor: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    padding: '5px 10px',
-    fontSize: '15px',
-    cursor: 'pointer',
-    color: '#707070',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '5px',
-    marginRight: '10px',
+    backgroundColor: "#fff",
+    border: "none",
+    borderRadius: "5px",
+    padding: "5px 10px",
+    fontSize: "15px",
+    cursor: "pointer",
+    color: "#707070",
+    display: "flex",
+    alignItems: "center",
+    gap: "5px",
+    marginRight: "10px",
   },
   filterContainer: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   filterSelect: {
-    padding: '5px',
-    borderRadius: '5px',
-    border: 'none',
-    fontFamily: 'Poppins',
-    fontSize: '16px',
-    fontWeight: '400',
-    lineHeight: '24px',
-    textAlign: 'center',
+    padding: "5px",
+    borderRadius: "5px",
+    border: "none",
+    fontFamily: "Poppins",
+    fontSize: "16px",
+    fontWeight: "400",
+    lineHeight: "24px",
+    textAlign: "center",
   },
 
   board: {
-    display: 'flex',
-    gap: '15px',
-    maxWidth: '100%',
-    overflowX: 'auto',
+    display: "flex",
+    gap: "15px",
+    maxWidth: "100%",
+    overflowX: "auto",
   },
   column: {
     flex: 1,
-    backgroundColor: '#eef2f5',
-    borderRadius: '10px',
-    padding: '20px 35px 20px 20px',
-    minWidth: '320px',
-    maxWidth: '380px',
-    maxHeight: '80vh',
-    overflowY: 'auto',
+    backgroundColor: "#eef2f5",
+    borderRadius: "10px",
+    padding: "20px 35px 20px 20px",
+    minWidth: "320px",
+    maxWidth: "380px",
+    maxHeight: "80vh",
+    overflowY: "auto",
   },
   columnHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   columnTitle: {
-    fontSize: '16px',
+    fontSize: "16px",
     fontWeight: 500,
-    lineHeight: '24px',
-    textAlign: 'left',
+    lineHeight: "24px",
+    textAlign: "left",
   },
   iconContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '18px',
+    display: "flex",
+    alignItems: "center",
+    gap: "18px",
   },
   plusIcon: {
-    fontSize: '25px',
-    color: 'black',
-
+    fontSize: "25px",
+    color: "black",
   },
   collapseIcon: {
-    fontSize: '20px',
-    cursor: 'pointer',
-    color: '#707070',
+    fontSize: "20px",
+    cursor: "pointer",
+    color: "#707070",
   },
   cardList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
 };
