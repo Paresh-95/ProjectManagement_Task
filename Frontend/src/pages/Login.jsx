@@ -5,7 +5,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'; 
 import { AuthContext } from '../context/AuthContext';
 
-export default function Component() {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

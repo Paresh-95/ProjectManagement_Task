@@ -4,7 +4,7 @@ import { FaTrash } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const AddTask = ({ isOpen, onClose, onSubmit }) => {
+export default function AddTask ({ isOpen, onClose, onSubmit }) {
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('MODERATE');
   const [assignee, setAssignee] = useState('');
@@ -370,4 +370,3 @@ const styles = {
   },
 };
 
-export default AddTask;

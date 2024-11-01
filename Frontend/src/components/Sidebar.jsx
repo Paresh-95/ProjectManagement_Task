@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Sidebar({ activePage }) {
 
-    const {logout} = useContext(AuthContext)
+  const {logout} = useContext(AuthContext)
   return (
     <aside style={styles.sidebar}>
       <div style={styles.logo}>

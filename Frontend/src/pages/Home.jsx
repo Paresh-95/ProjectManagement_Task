@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { LuUsers2 } from "react-icons/lu";
 import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
@@ -10,7 +10,7 @@ import { UserContext } from "../context/UserContext";
 
 
 
-export default function Dashboard() {
+export default function Home() {
   const {user,getUser} = useContext(UserContext)
   useEffect(() => {
     getUser();
@@ -74,7 +74,7 @@ export default function Dashboard() {
               <div style={styles.columnHeader}>
                 <h3 style={styles.columnTitle}>{column.name}</h3>
 
-                {/* Container for both icons */}
+             
                 <div style={styles.iconContainer}>
                   {column.key === "todo" && (
                     <GoPlus

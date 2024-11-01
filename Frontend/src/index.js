@@ -5,8 +5,8 @@ import "./index.css";
 
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import { UserProvider } from "./context/UserContext";
 import { AuthProvider } from "./context/AuthContext";
-import {  UserProvider } from "./context/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
