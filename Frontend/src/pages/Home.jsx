@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useState } from 'react';
 import { LuUsers2 } from "react-icons/lu";
 import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
