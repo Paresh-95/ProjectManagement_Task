@@ -262,7 +262,7 @@ const styles = {
   },
   inlineInput: {
     width: "80%",
-    height: "30px",
+    height: "50px",
     padding: "10px",
     fontSize: "14px",
     fontFamily: "Poppins, sans-serif",

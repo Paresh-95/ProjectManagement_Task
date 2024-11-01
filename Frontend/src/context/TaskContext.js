@@ -1,4 +1,4 @@
-import React,{createContext,useState} from "react";
+import React,{createContext,useEffect,useState} from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,36 @@ export const TaskProvider = ({children}) =>{
             toast.error("Fetching Tasks Failed. Please try again.");
         }
     };
+
+
+    const updateTask = async (taskId,updatedData) =>{
+        try {
+            console.log("Google",taskId);
+            
+            const updateTaskUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/Task/updateTask/${taskId}`
+            await axios.put(updateTaskUrl,updatedData,{withCredentials:true})
+            toast.success("Task Updated Successfully")
+            
+        } catch (error) {
+            console.log("Task Updation Failed: ",error);
+            toast.error("Task Updation Failed,try again ")
+        }
+    }
+
+
+
+    const deleteTask = async (taskId) =>{
+        try {
+            const deleteTaskUrl =  `${process.env.REACT_APP_BACKEND_API}/api/v1/Task/deleteTask/${taskId}`
+            await axios.delete(deleteTaskUrl,{withCredentials:true})
+            toast.success("Task Deleted Successfully")            
+        } catch (error) {
+            console.log("Task Deletion Failed: ",error);
+            toast.error("Deleting Tasks Failed. Please try again.");
+
+            
+        }
+    }
     
 
     const addMemberToBoard = async (memberEmail) => {
@@ -55,10 +85,8 @@ export const TaskProvider = ({children}) =>{
         }
     };
 
-    
-
     return(
-        <TaskContext.Provider value={{task,createTask,getTask,addMemberToBoard}}>
+        <TaskContext.Provider value={{task,createTask,getTask,addMemberToBoard,deleteTask,updateTask}}>
             {children}
         </TaskContext.Provider>
     )

@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
   ],
   boards:[
     {
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Board"
+      type:String,
+      unique:true
     }
   ]
 },{

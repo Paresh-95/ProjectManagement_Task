@@ -6,21 +6,30 @@ exports.getUserTaskAnalytics = async (req, res) => {
 
     const tasks = await Task.find({ createdBy: userId });
 
+
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(
-      (task) => tasks.status === "Done"
+      (task) => task.status === "Done"
     ).length;
     const backlogTasks = tasks.filter(
-      (task) => tasks.status === "Backlog"
+      (task) => task.status === "Backlog"
     ).length;
     const inProgressTasks = tasks.filter(
-      (task) => tasks.status === "In-Progess"
+      (task) => task.status === "In-Progress"
     ).length;
-    const todoTasks = tasks.filter((task) => tasks.status === "To-Do").length;
+    const todoTasks = tasks.filter((task) => task.status === "To-Do").length;
 
-    const lowPriorityTasks = tasks.filter(task => task.priority ==='Low').length;
-    const moderatePriorityTasks = tasks.filter(task => task.priority ==='Moderate').length;
-    const highPriorityTasks = tasks.filter(task => task.priority === "High").length;
+    
+    
+    const lowPriorityTasks = tasks.filter(
+      (task) => task.priority === "Low"
+    ).length;
+    const moderatePriorityTasks = tasks.filter(
+      (task) => task.priority === "Moderate"
+    ).length;
+    const highPriorityTasks = tasks.filter(
+      (task) => task.priority === "High"
+    ).length;
 
     const analytics = {
       totalTasks,
@@ -30,7 +39,7 @@ exports.getUserTaskAnalytics = async (req, res) => {
       todoTasks,
       lowPriorityTasks,
       moderatePriorityTasks,
-      highPriorityTasks
+      highPriorityTasks,
     };
 
     return res.status(200).json({
@@ -46,4 +55,3 @@ exports.getUserTaskAnalytics = async (req, res) => {
     });
   }
 };
-

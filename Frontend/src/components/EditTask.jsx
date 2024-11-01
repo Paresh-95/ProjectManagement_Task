@@ -5,17 +5,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserContext } from "../context/UserContext";
 
-export default function EditTask({ isOpen, onClose, onSubmit }) {
+export default function EditTask({ isOpen, onClose, onSubmit,data }) {
   
   const {user} = useContext(UserContext);
 
-  const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState("Moderate");
-  const [assigneeTo, setAssigneeTo] = useState("");
-  const [checklist, setChecklist] = useState([
-    { id: "1", item: "Task to be done", completed: false },
-  ]);
-  const [dueDate, setDueDate] = useState(null);
+  const [title, setTitle] = useState(data.title);
+  const [priority, setPriority] = useState(data.priority);
+  const [status,setStatus] = useState(data.status)
+  const [assigneeTo, setAssigneeTo] = useState(data.assigneeTo);
+  const [checklist, setChecklist] = useState(data.checklist);
+  const [dueDate, setDueDate] = useState(data.dueDate);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e) => {
@@ -59,7 +58,7 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
               id="title"
               type="text"
               placeholder="Enter Task Title"
-              value={title}
+              value={data.title}
               onChange={(e) => setTitle(e.target.value)}
               required
               style={styles.input}
@@ -99,6 +98,28 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
               ))}
             </div>
           </div>
+          <div style={{ ...styles.formGroup, ...styles.priorityRow }}>
+          <label style={styles.label}>
+              Select Priority <span style={styles.required}>*</span>
+            </label>
+          <div style={styles.statusGroup}>
+              {["To-Do", "Done", "Backlog","In-Progress"].map((level) => (
+                <div
+                  key={level}
+                  onClick={() => setStatus(level)}
+                  style={{
+                    ...styles.priorityOption,
+                    backgroundColor:
+                        status === level ? "#EEECEC" : "transparent",
+                    color: "#767575",
+                  }}
+                >
+                  
+                  {level}
+                </div>
+              ))}
+            </div>
+            </div>
 
           {/* Assignee Row */}
           <div style={{ ...styles.formGroup, ...styles.inlineGroup }}>
@@ -107,7 +128,7 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
             </label>
             <select
               id="assignee"
-              value={assigneeTo}
+              value={data.assigneeTo}
               onChange={(e) => setAssigneeTo(e.target.value)}
               style={styles.inlineInput}
             >
@@ -129,7 +150,7 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
               {checklist.length}) <span style={styles.required}>*</span>
             </label>
             <div style={styles.checklistContainer}>
-              {checklist.map((task) => (
+              {data.checklist.map((task) => (
                 <div key={task.id} style={styles.checklistItem}>
                   <input
                     type="checkbox"
@@ -175,7 +196,7 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
               onClick={() => setCalendarOpen(!calendarOpen)}
               style={styles.dueDateBtn}
             >
-              Select Due Date
+              {"Select Due Date"}
             </button>
 
             <div style={styles.rightButtonGroup}>
@@ -183,7 +204,7 @@ export default function EditTask({ isOpen, onClose, onSubmit }) {
                 Cancel
               </button>
               <button type="submit" style={styles.saveBtn}>
-                Save
+                Update
               </button>
             </div>
           </div>
@@ -235,6 +256,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    
   },
   label: {
     fontFamily: "Inter, sans-serif",
@@ -262,7 +284,7 @@ const styles = {
   },
   inlineInput: {
     width: "80%",
-    height: "30px",
+    height: "50px",
     padding: "10px",
     fontSize: "14px",
     fontFamily: "Poppins, sans-serif",
@@ -275,6 +297,10 @@ const styles = {
     gap: "16px",
   },
   priorityGroup: {
+    display: "flex",
+    gap: "16px",
+  },
+  statusGroup:{
     display: "flex",
     gap: "16px",
   },

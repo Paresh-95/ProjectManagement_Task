@@ -1,6 +1,5 @@
 const Task = require("../models/Task-model");
 const User = require("../models/User-model");
-const Board = require("../models/Board-model")
 const moment = require("moment");
 
 exports.createTask = async (req, res) => {
@@ -12,11 +11,7 @@ exports.createTask = async (req, res) => {
       dueDate,
       checklist,
       assignedTo,
-      boardId
     } = req.body;
-
-
-    
 
     if (!title || !priority) {
       return res.status(400).json({
@@ -33,16 +28,6 @@ exports.createTask = async (req, res) => {
       });
     }
 
-
-    let board = null;
-    if (boardId) {
-      board = await Board.findById(boardId);
-      if (!board) {
-        return res.status(404).json({ message: "Board not found." });
-      }
-    }
-  
-
     const task = new Task({
       title,
       description,
@@ -54,12 +39,6 @@ exports.createTask = async (req, res) => {
     });
 
     const savedTask = await task.save();
-
-
-    if (board) {
-      board.tasks.push(savedTask._id);
-      await board.save();
-    }
 
     const user = await User.findById(req.user.id);
     user.tasks.push(savedTask.id);
@@ -82,7 +61,7 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
   try {
-    const {priority, dueDateRange } = req.query;
+    const { priority, dueDateRange } = req.query;
     const userId = req.user.id;
     
     let query = { createdBy: userId };
@@ -90,7 +69,6 @@ exports.getTasks = async (req, res) => {
     if (priority) {
       query.priority = priority;
     }
-
 
     if (dueDateRange) {
       const today = moment().startOf("day");
@@ -112,21 +90,24 @@ exports.getTasks = async (req, res) => {
       }
     }
 
+    // Fetch tasks and sort by priority
     const tasks = await Task.find(query).populate("assignedTo", "name email");
+    const priorityOrder = { High: 1, Moderate: 2, Low: 3 };
+
+    tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
     return res.status(200).json({
       success: true,
-      message: "Task Recieved Successfully",
+      message: "Tasks retrieved successfully.",
       tasks,
     });
-
 
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
       message:
-        "Internal server error Something went wrong while retreving the task",
+        "Internal server error: Something went wrong while retrieving the tasks.",
     });
   }
 };
@@ -349,7 +330,7 @@ exports.updateChecklistItem = async (req, res) => {
     checkListItem.completed = completed;
 
     const updatedChecklistItem = await task.save();
-
+    
     return res.status(200).json({
       success: true,
       message: "CheckList item updated Successfully",

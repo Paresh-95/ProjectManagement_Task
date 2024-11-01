@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react";
+import { TaskContext } from '../context/TaskContext';
+import EditTask from './EditTask';
 
 export default function TaskCard({ 
   items
 }) {
+  const {deleteTask,updateTask} = useContext(TaskContext)
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [tasks, setTasks] = useState([
@@ -12,12 +15,10 @@ export default function TaskCard({
     { id: 3, text: 'Task to be gopal', checked: false },
   ]);
 
-
-  
-
   const truncateText = (text, limit) => {
     return text.length > limit ? text.substring(0, limit) + '...' : text;
   };
+
 
   const priorityColors = {
     High: { dot: '#ff2473', text: '#ff4747' },
@@ -26,6 +27,19 @@ export default function TaskCard({
   };
 
   const color = priorityColors[items.priority] || { dot: '#1e90ff', text: '#000000' };
+
+  function handleDelete(){
+    console.log(items._id);
+    deleteTask(items._id)
+  };
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const handleEditTaskSubmit = (taskData) => {
+    updateTask(items._id,taskData);
+  };
 
   const styles = {
     card: {
@@ -197,7 +211,7 @@ export default function TaskCard({
         <div style={styles.priorityWrapper}>
           <div style={styles.priorityDot} />
           <span style={styles.priorityText}>
-           {items.priority}
+           {items.priority} Priority
           </span> 
         </div>
         <div style={styles.menuWrapper}>
@@ -206,9 +220,9 @@ export default function TaskCard({
           </button>
           {isMenuOpen && (
             <div style={styles.menuDropdown}>
-              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false) }>Edit</button>
+              <button style={styles.menuDropdownItem} onClick={() => setIsModalOpen(true) }>Edit</button>
               <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false) }>Share</button>
-              <button style={{ ...styles.menuDropdownItem, ...styles.deleteButton }} onClick={() => setIsMenuOpen(false)}>Delete</button>
+              <button style={{ ...styles.menuDropdownItem, ...styles.deleteButton }} onClick={handleDelete}>Delete</button>
             </div>
           )}
         </div>
@@ -256,6 +270,12 @@ export default function TaskCard({
           <button style={styles.statusButton}>DONE</button>
         </div>
       </div>
+      <EditTask
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleEditTaskSubmit}
+        data={items}
+      />
     </div>
   );
 }

@@ -11,7 +11,8 @@ import { TaskContext } from "../context/TaskContext";
 import AddPeopleAttachment from "../components/AddPeopleAttachment";
 
 export default function Home() {
-  const { createTask, getTask, task,addMemberToBoard } = useContext(TaskContext);
+  const { createTask, getTask, task, addMemberToBoard } =
+  useContext(TaskContext);
   const { user, getUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -21,7 +22,6 @@ export default function Home() {
   useEffect(() => {
     getTask();
   }, []);
-
 
   const [isAddPeopleOpen, setIsAddPeopleOpen] = useState(false);
 
@@ -106,10 +106,13 @@ export default function Home() {
 
               {!collapsedBoards[column.key] && (
                 <div style={styles.cardList}>
-                  {task.filter((task) => task.status === column.name) ? (
-                    task.map((item,index) => <TaskCard key={index} items={item} />)
+                  {task.filter((item) => item.status === column.name).length >
+                  0 ? (
+                    task
+                      .filter((item) => item.status === column.name)
+                      .map((item) => <TaskCard key={item.id} items={item} />)
                   ) : (
-                    <div>Something went wrong</div>
+                    <div></div>
                   )}
                 </div>
               )}
@@ -122,7 +125,7 @@ export default function Home() {
         onClose={() => setIsAddPeopleOpen(false)}
         onSubmit={(memberEmail) => {
           console.log("Adding user:", memberEmail);
-          addMemberToBoard(memberEmail)
+          addMemberToBoard(memberEmail);
         }}
       />
       <AddTask

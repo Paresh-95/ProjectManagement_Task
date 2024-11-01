@@ -5,14 +5,9 @@ const {addMemberToBoard,removeMemberFromBoard,addTaskToBoard,createBoard,getBoar
 const {auth} = require("../middleware/User-middle")
 
 
-router.post("/createBoard",auth,createBoard)
-router.get("/getBoards",auth,getBoards)
-router.get("/getBoardById/:id",auth,getBoardById)
-router.put("/updateBoard/:id",auth,updateBoard)
-router.delete("/deleteBoard/:id",auth,deleteBoard)
-router.post("/addMemeber/:id",auth,addMemberToBoard)
-router.delete("/removeMember/:id",auth,removeMemberFromBoard)
-router.post("/addTaskToBoard/:id",auth,addTaskToBoard)
+router.post("/addMember",auth,addMemberToBoard)
+router.delete("/removeMember",auth,removeMemberFromBoard)
+
 
 
 module.exports = router
