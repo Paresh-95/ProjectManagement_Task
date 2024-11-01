@@ -5,6 +5,7 @@ import Register from "./pages/Register"
 import Home from "./pages/Home"
 import { Routes, Route } from "react-router-dom";
 import './App.css';
+import PublicPage from "./pages/PublicPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>
           <Route path="/settings" element={<Settings />}></Route>
+          <Route path="/publicpage" element={<PublicPage/>}></Route>
 
         </Routes>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { LuUsers2 } from "react-icons/lu";
 import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
@@ -7,14 +7,23 @@ import TaskCard from "../components/TaskCard";
 import AddTask from "../components/AddTask";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-
-
+import { TaskContext } from "../context/TaskContext";
+import AddPeopleAttachment from "../components/AddPeopleAttachment";
 
 export default function Home() {
-  const {user,getUser} = useContext(UserContext)
+  const { createTask, getTask, task,addMemberToBoard } = useContext(TaskContext);
+  const { user, getUser } = useContext(UserContext);
+
   useEffect(() => {
     getUser();
   }, []);
+
+  useEffect(() => {
+    getTask();
+  }, []);
+
+
+  const [isAddPeopleOpen, setIsAddPeopleOpen] = useState(false);
 
   const today = new Date().toLocaleDateString("en-US", {
     day: "numeric",
@@ -30,9 +39,12 @@ export default function Home() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleTaskSubmit = (taskData) => {
+    createTask(taskData);
     console.log("New task:", taskData);
   };
+
   const toggleCollapse = (board) => {
     setCollapsedBoards((prevState) => ({
       ...prevState,
@@ -51,9 +63,13 @@ export default function Home() {
 
         <div style={styles.boardHeader}>
           <h2 style={styles.boardTitle}>Board</h2>
-          <button style={styles.addPeopleButton}>
+          <button
+            style={styles.addPeopleButton}
+            onClick={() => setIsAddPeopleOpen(true)}
+          >
             <LuUsers2 /> Add People
           </button>
+
           <div style={styles.filterContainer}>
             <select style={styles.filterSelect}>
               <option value="today">Today</option>
@@ -65,18 +81,17 @@ export default function Home() {
 
         <div style={styles.board}>
           {[
-            { name: "Backlog", key: "backlog" },
-            { name: "To do", key: "todo" },
-            { name: "In progress", key: "inProgress" },
-            { name: "Done", key: "done" },
+            { name: "Backlog", key: "Backlog" },
+            { name: "To-Do", key: "To-Do" },
+            { name: "In-Progress", key: "In-Progress" },
+            { name: "Done", key: "Done" },
           ].map((column) => (
             <div key={column.key} style={styles.column}>
               <div style={styles.columnHeader}>
                 <h3 style={styles.columnTitle}>{column.name}</h3>
 
-             
                 <div style={styles.iconContainer}>
-                  {column.key === "todo" && (
+                  {column.key === "To-Do" && (
                     <GoPlus
                       style={styles.plusIcon}
                       onClick={() => setIsModalOpen(true)}
@@ -91,15 +106,25 @@ export default function Home() {
 
               {!collapsedBoards[column.key] && (
                 <div style={styles.cardList}>
-                  {["HIGH", "MODERATE"].map((priority) => (
-                    <TaskCard key={priority} priority={priority} />
-                  ))}
+                  {task.filter((task) => task.status === column.name) ? (
+                    task.map((item,index) => <TaskCard key={index} items={item} />)
+                  ) : (
+                    <div>Something went wrong</div>
+                  )}
                 </div>
               )}
             </div>
           ))}
         </div>
       </main>
+      <AddPeopleAttachment
+        isOpen={isAddPeopleOpen}
+        onClose={() => setIsAddPeopleOpen(false)}
+        onSubmit={(memberEmail) => {
+          console.log("Adding user:", memberEmail);
+          addMemberToBoard(memberEmail)
+        }}
+      />
       <AddTask
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

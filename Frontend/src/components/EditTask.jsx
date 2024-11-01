@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserContext } from "../context/UserContext";
 
-export default function AddTask({ isOpen, onClose, onSubmit }) {
+export default function EditTask({ isOpen, onClose, onSubmit }) {
   
   const {user} = useContext(UserContext);
 

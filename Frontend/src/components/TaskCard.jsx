@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 
 export default function TaskCard({ 
-  priority = 'MODERATE',
-  title = 'Typography change in the First two screens of the application and more text that should be truncated',
-  dueDate = 'Feb 10th',
-  status = 'BACKLOG'
+  items
 }) {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,22 +12,24 @@ export default function TaskCard({
     { id: 3, text: 'Task to be gopal', checked: false },
   ]);
 
+
+  
+
   const truncateText = (text, limit) => {
     return text.length > limit ? text.substring(0, limit) + '...' : text;
   };
 
   const priorityColors = {
-    HIGH: { dot: '#ff2473', text: '#ff4747' },
-    MODERATE: { dot: '#18b0ff', text: '#1e90ff' },
-    LOW: { dot: '#63c05b', text: '#32cd32' }
+    High: { dot: '#ff2473', text: '#ff4747' },
+    Moderate: { dot: '#18b0ff', text: '#1e90ff' },
+    Low: { dot: '#63c05b', text: '#32cd32' }
   };
 
-  const color = priorityColors[priority] || { dot: '#1e90ff', text: '#000000' };
+  const color = priorityColors[items.priority] || { dot: '#1e90ff', text: '#000000' };
 
   const styles = {
     card: {
       backgroundColor: 'white',
-      
       borderRadius: '25px',
       boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
       width: '95%',
@@ -198,8 +197,8 @@ export default function TaskCard({
         <div style={styles.priorityWrapper}>
           <div style={styles.priorityDot} />
           <span style={styles.priorityText}>
-            {priority} PRIORITY
-          </span>
+           {items.priority}
+          </span> 
         </div>
         <div style={styles.menuWrapper}>
           <button style={styles.menuButton} onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -207,15 +206,15 @@ export default function TaskCard({
           </button>
           {isMenuOpen && (
             <div style={styles.menuDropdown}>
-              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false)}>Edit</button>
-              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false)}>Share</button>
+              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false) }>Edit</button>
+              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false) }>Share</button>
               <button style={{ ...styles.menuDropdownItem, ...styles.deleteButton }} onClick={() => setIsMenuOpen(false)}>Delete</button>
             </div>
           )}
         </div>
       </div>
 
-      <h4 style={styles.cardTitle}>{truncateText(title, 50)}</h4>
+      <h4 style={styles.cardTitle}>{truncateText(items.title, 50)}</h4>
 
       <div style={styles.checklistContainer}>
         <div style={styles.checklistHeader}>
@@ -229,7 +228,7 @@ export default function TaskCard({
 
         {isChecklistOpen && (
           <div style={styles.checklistItems}>
-            {tasks.map((task) => (
+            {items.checklist.map((task) => (
               <div key={task.id} style={styles.checklistItem}>
                 <input
                   type="checkbox"
@@ -242,7 +241,7 @@ export default function TaskCard({
                     ));
                   }}
                 />
-                <label htmlFor={`task-${task.id}`}>{task.text}</label>
+                <label htmlFor={`task-${task.id}`}>{task.item}</label>
               </div>
             ))}
           </div>
@@ -250,9 +249,9 @@ export default function TaskCard({
       </div>
 
       <div style={styles.cardActions}>
-        <button style={styles.dateButton}>{dueDate}</button>
+        <button style={styles.dateButton}>{items.dueDate}</button>
         <div style={styles.statusButtons}>
-          <button style={styles.statusButton}>{status}</button>
+          <button style={styles.statusButton}>{items.status}</button>
           <button style={styles.statusButton}>PROGRESS</button>
           <button style={styles.statusButton}>DONE</button>
         </div>
