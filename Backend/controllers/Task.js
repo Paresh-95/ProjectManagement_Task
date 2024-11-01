@@ -82,20 +82,15 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
   try {
-    const {boardId,priority, dueDateRange } = req.query;
+    const {priority, dueDateRange } = req.query;
     const userId = req.user.id;
-
-
-   
+    
     let query = { createdBy: userId };
 
     if (priority) {
       query.priority = priority;
     }
 
-    if (boardId) {
-      query.board = boardId;
-    }
 
     if (dueDateRange) {
       const today = moment().startOf("day");

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CiMail } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'; 
+import { AuthContext } from '../context/AuthContext';
 
 export default function Component() {
   const [email, setEmail] = useState('');
@@ -10,10 +11,14 @@ export default function Component() {
   const [showPassword, setShowPassword] = useState(false);
   
   const navigate = useNavigate();
+  const {login} = useContext(AuthContext);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Login submitted', { email, password });
+    const userCred = {
+      email,password
+    }
+    e.preventDefault(); 
+    login(userCred)
   };
 
   return (

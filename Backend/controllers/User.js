@@ -38,8 +38,8 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, email, newPassword, oldPassword } = req.body;
-
+    const { name, email, oldPassword, newPassword } = req.body;
+    
     if (!userId) {
       return res.status(404).json({
         success: false,
@@ -48,9 +48,8 @@ exports.updateUser = async (req, res) => {
     }
 
     const user = await User.findById(userId);
-    console.log(user);
     
-
+    
     if (await bcryptjs.compare(oldPassword, user.password)) {
 
       let hashedPassword;

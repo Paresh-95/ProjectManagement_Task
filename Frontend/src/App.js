@@ -8,6 +8,7 @@ import './App.css';
 
 function App() {
   return (
+<<<<<<< Updated upstream
     <>
       <div>
         <Routes>
@@ -20,6 +21,19 @@ function App() {
         </Routes>
       </div>
     </>
+=======
+   <>
+   <div>
+   <Routes>
+            <Route path="/" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/home" element={<Home />}></Route>
+            <Route path="/analytics" element={<Analytics />}></Route>
+            <Route path="/settings" element={<Settings />}></Route>
+          </Routes>
+   </div>
+   </>
+>>>>>>> Stashed changes
   );
 }
 

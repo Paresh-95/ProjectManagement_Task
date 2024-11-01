@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext,useEffect, useState } from "react";
 import { LuUsers2 } from "react-icons/lu";
 import { VscCollapseAll } from "react-icons/vsc";
 import { GoPlus } from "react-icons/go";
@@ -38,7 +38,7 @@ export default function Dashboard() {
       <Sidebar activePage="dashboard" />
       <main style={styles.main}>
         <header style={styles.header}>
-          <h1 style={styles.welcomeText}>Welcome! Kumar</h1>
+          <h1 style={styles.welcomeText}>Welcome! {user.name || " User"}</h1>
           <span style={styles.dateText}>{today}</span>
         </header>
 
@@ -58,10 +58,10 @@ export default function Dashboard() {
 
         <div style={styles.board}>
           {[
-            { name: 'Backlog', key: 'backlog' },
-            { name: 'To do', key: 'todo' },
-            { name: 'In progress', key: 'inProgress' },
-            { name: 'Done', key: 'done' },
+            { name: "Backlog", key: "backlog" },
+            { name: "To do", key: "todo" },
+            { name: "In progress", key: "inProgress" },
+            { name: "Done", key: "done" },
           ].map((column) => (
             <div key={column.key} style={styles.column}>
               <div style={styles.columnHeader}>
@@ -84,7 +84,7 @@ export default function Dashboard() {
 
               {!collapsedBoards[column.key] && (
                 <div style={styles.cardList}>
-                  {['HIGH', 'MODERATE'].map((priority) => (
+                  {["HIGH", "MODERATE"].map((priority) => (
                     <TaskCard key={priority} priority={priority} />
                   ))}
                 </div>
@@ -111,13 +111,13 @@ const styles = {
   },
   main: {
     flex: 1,
-    padding: '5px 20px 20px 20px',
-    overflowY: 'auto',
+    padding: "5px 20px 20px 20px",
+    overflowY: "auto",
   },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   welcomeText: {
     fontSize: '22px',
@@ -126,25 +126,25 @@ const styles = {
     textAlign: 'left',
   },
   dateText: {
-    marginLeft: '10px',
-    color: '#707070',
-    fontFamily: 'Poppins',
-    fontSize: '20px',
+    marginLeft: "10px",
+    color: "#707070",
+    fontFamily: "Poppins",
+    fontSize: "20px",
     fontWeight: 500,
-    lineHeight: '30px',
-    textAlign: 'left',
+    lineHeight: "30px",
+    textAlign: "left",
   },
   boardHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '20px',
+    display: "flex",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   boardTitle: {
-    fontSize: '29px',
+    fontSize: "29px",
     fontWeight: 500,
-    lineHeight: '43.5px',
-    textAlign: 'left',
-    marginRight: '5px',
+    lineHeight: "43.5px",
+    textAlign: "left",
+    marginRight: "5px",
   },
   addPeopleButton: {
     backgroundColor: '#fff',
@@ -181,30 +181,30 @@ const styles = {
   },
   column: {
     flex: 1,
-    backgroundColor: '#eef2f5',
-    borderRadius: '10px',
-    padding: '20px 35px 20px 20px',
-    minWidth: '320px',
-    maxWidth: '380px',
-    maxHeight: '80vh',
-    overflowY: 'auto',
+    backgroundColor: "#eef2f5",
+    borderRadius: "10px",
+    padding: "20px 35px 20px 20px",
+    minWidth: "320px",
+    maxWidth: "380px",
+    maxHeight: "80vh",
+    overflowY: "auto",
   },
   columnHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "20px",
   },
   columnTitle: {
-    fontSize: '16px',
+    fontSize: "16px",
     fontWeight: 500,
-    lineHeight: '24px',
-    textAlign: 'left',
+    lineHeight: "24px",
+    textAlign: "left",
   },
   iconContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '18px',
+    display: "flex",
+    alignItems: "center",
+    gap: "18px",
   },
   plusIcon: {
     fontSize: '25px',
@@ -212,13 +212,13 @@ const styles = {
 
   },
   collapseIcon: {
-    fontSize: '20px',
-    cursor: 'pointer',
-    color: '#707070',
+    fontSize: "20px",
+    cursor: "pointer",
+    color: "#707070",
   },
   cardList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
 };

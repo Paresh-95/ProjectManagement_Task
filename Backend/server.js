@@ -6,13 +6,17 @@ const userRoute = require("./routes/UserRoutes");
 const AnalyticsRoutes = require("./routes/AnalyticsRoutes");
 const TaskRoutes = require("./routes/TaskRoutes")
 const BoardRoutes = require("./routes/BoardRoutes")
+const cors = require("cors")
 const PORT = process.env.PORT || 3000
 
 const app = express();
 dbConnect();
 
-
-
+const corsOptions = {
+    origin: ['http://localhost:3000'],
+    credentials:true
+}
+app.use(cors(corsOptions))
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/auth",userRoute);
