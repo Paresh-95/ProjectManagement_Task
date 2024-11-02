@@ -17,6 +17,9 @@ const corsOptions = {
     credentials:true
 }
 app.use(cors(corsOptions))
+
+app.options("*", cors(corsOptions)); 
+
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/auth",userRoute);
