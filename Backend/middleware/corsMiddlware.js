@@ -1,6 +1,9 @@
 // corsMiddleware.js
+require("dotenv").config();
+
+
 const corsMiddleware = (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // Change "*" to your front-end URL if using credentials
+    res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL); // Change "*" to your front-end URL if using credentials
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Max-Age", "1800");
     res.setHeader("Access-Control-Allow-Headers", "content-type");
