@@ -1,20 +1,35 @@
 // corsMiddleware.js
-require("dotenv").config();
-
+const cors = require("cors");
 
 const corsMiddleware = (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL); // Change "*" to your front-end URL if using credentials
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Max-Age", "1800");
-    res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
+    // Define allowed origins
+    const allowedOrigins = [
+        'http://localhost:3000', // Development URL
+        'https://project-management-task-u2qo.vercel.app', // Your deployed frontend URL
+        process.env.FRONTEND_URL // Additional dynamic frontend URL from environment variables
+    ];
 
-    // Handle preflight requests
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(204); // No content response for OPTIONS
+    const origin = req.headers.origin;
+
+    // Check if the origin is allowed
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Access-Control-Max-Age', '1800');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Add any other headers your app needs
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+
+        // Handle preflight request
+        if (req.method === 'OPTIONS') {
+            return res.sendStatus(204); // No Content
+        }
+    } else {
+        // If origin is not allowed, respond with a 403 Forbidden
+        return res.status(403).send('CORS policy: Access denied');
     }
 
-    next(); // Move to the next middleware or route handler
+    // Proceed to the next middleware or route handler
+    next();
 };
 
 module.exports = corsMiddleware;
