@@ -15,8 +15,9 @@ dbConnect();
 const corsOptions = {
     origin: ['http://localhost:3000', process.env.FRONTEND_URL],
     credentials:true
-}
+}   
 app.use(cors(corsOptions))
+app.options('*', cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/auth",userRoute);
