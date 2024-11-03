@@ -21,16 +21,14 @@ dbConnect();
 //   allowedHeaders: ["Content-Type", "Authorization"],
 // };
 
-app.use(
-  cors({
-    origin: [
-        "*"
-        //"http://localhost:3000",
-        //https://project-management-task-u2qo.vercel.app`,
-    ],
-    credentials: true,
-  })
-);
+app.use((req, res, next) => {
+
+    res.setHeader("Access-Control-Allow-Origin", '*');
+    res.removeHeader('x-powered-by');
+    res.setHeader("Access-Control-Allow-Methods", '*');
+    res.setHeader("Access-Control-Allow-Headers", '*');
+
+});
 
 // app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
