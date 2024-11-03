@@ -11,8 +11,10 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
+      console.log(userData);
+      
       const registerUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/signup`;     
-      await axios.post(registerUrl, userData, { withCredentials: true }); // Include credentials
+      await axios.post(registerUrl, userData); // Include credentials
       setIsAuthenticated(true);
       toast.success("User Registered Successfully");
       navigate("/");
@@ -25,9 +27,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (userCred) => {
     try {
       const loginUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/login`;  
-      const response = await axios.post(loginUrl, userCred, { withCredentials: true }); // Include credentials
+      const response = await axios.post(loginUrl, userCred); // Include credentials
       
-      // Token is stored in cookies, no need to save in localStorage
       setIsAuthenticated(true);
       toast.success("User Logged In Successfully");
       navigate("/home");

@@ -108,6 +108,8 @@ const styles = {
     textAlign: "left",
     color: "#FF4757",
     textDecoration: "none",
+    border:"none",
+    backgroundColor:'white',
     display: "flex",
     alignItems: "center",
     gap: "10px",
