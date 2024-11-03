@@ -11,18 +11,17 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (userData) => {
     try {
-      console.log(userData);
-      
       const registerUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/signup`;     
-      await axios.post(registerUrl, userData); // Include credentials
+      await axios.post(registerUrl, userData);
       setIsAuthenticated(true);
-      toast.success("User Registered Successfully");
+      toast.success("User Tegistered Successfully");
       navigate("/");
     } catch (error) {
-      console.error("Registration failed: ", error.response?.data?.message || error.message);
-      toast.error("Registration failed: " + (error.response?.data?.message || "Something went wrong"));
+      console.error("Registration failed: " + error);
+      toast.error("Something went wrong");
     }
   };
+
 
   const login = async (userCred) => {
     try {
