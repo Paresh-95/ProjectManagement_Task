@@ -21,14 +21,7 @@ dbConnect();
 //   allowedHeaders: ["Content-Type", "Authorization"],
 // };
 
-app.use((req, res, next) => {
-
-    res.setHeader("Access-Control-Allow-Origin", '*');
-    res.removeHeader('x-powered-by');
-    res.setHeader("Access-Control-Allow-Methods", '*');
-    res.setHeader("Access-Control-Allow-Headers", '*');
-
-});
+app.use(cors());
 
 // app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
