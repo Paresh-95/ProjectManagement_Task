@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://project-management-task-u2qo.vercel.app",
+      "https://project-management-task-y2np.vercel.app",
     ],
     credentials: true,
   })
