@@ -24,8 +24,7 @@ const userSchema = new mongoose.Schema({
   boards:[
     {
       type:String,
-      unique:true
-    }
+   }
   ]
 },{
   timestamps:true
