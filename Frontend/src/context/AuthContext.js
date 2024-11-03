@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (userCred) => {
     try {
       const loginUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/login`;  
-      const response = await axios.post(loginUrl, userCred, { withCredentials: true });
+      const response = await axios.post(loginUrl, userCred);
       
       const { token } = response.data; 
       localStorage.setItem("token", token); 
