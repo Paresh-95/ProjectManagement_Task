@@ -42,6 +42,23 @@ export default function TaskCard({
     updateTask(items._id,taskData);
   };
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const isPastDate = date < today;
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+    const suffix = (date.getDate() % 10 === 1 && date.getDate() !== 11) ? 'st' :
+                   (date.getDate() % 10 === 2 && date.getDate() !== 12) ? 'nd' :
+                   (date.getDate() % 10 === 3 && date.getDate() !== 13) ? 'rd' : 'th';
+    return { formattedDate: `${formattedDate}${suffix}`, isPastDate };
+  };
+
+  const { formattedDate, isPastDate } = formatDate(items.dueDate);
+  
+
   const styles = {
     card: {
       backgroundColor: 'white',
@@ -169,7 +186,7 @@ export default function TaskCard({
       marginTop: '16px',
     },
     dateButton: {
-      backgroundColor: '#cf3636',
+      backgroundColor: isPastDate ? '#cf3636' : '#DBDBDB',
       color: '#ffffff',
       border: 'none',
       borderRadius: '10px',
@@ -179,7 +196,7 @@ export default function TaskCard({
       lineHeight: '12px',
       textAlign: 'left',
       cursor: 'pointer',
-  },
+    },
   
     statusButtons: {
       display: 'flex',
@@ -264,7 +281,9 @@ export default function TaskCard({
       </div>
 
       <div style={styles.cardActions}>
-        <button style={styles.dateButton}>{items.dueDate}</button>
+      <button style={styles.dateButton}>
+         {formattedDate}
+        </button>
         <div style={styles.statusButtons}>
           <button style={styles.statusButton}>{items.status}</button>
           <button style={styles.statusButton}>PROGRESS</button>
