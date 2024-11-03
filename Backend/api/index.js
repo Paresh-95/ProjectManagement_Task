@@ -24,15 +24,16 @@ dbConnect();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
-      `https://project-management-task-u2qo.vercel.app`,
+        "*"
+        //"http://localhost:3000",
+        //https://project-management-task-u2qo.vercel.app`,
     ],
     credentials: true,
   })
 );
 
 // app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+// app.options("*", cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1/auth", userRoute);
