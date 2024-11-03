@@ -150,23 +150,33 @@ const styles = {
     padding: "2rem",
     textAlign: "center",
   },
-  astronautContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: "100%",
-    padding: "2rem",
-    marginBottom: "2rem",
+  
+  logoBackground: {
+    width: '200px', 
+    height: '200px',
+    backgroundColor: '#317F8B',
+    borderRadius: '50%',
+    opacity: 0.6,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative', 
+    zIndex: 1,
   },
   astronaut: {
-    width: "150px",
-    height: "150px",
-  },
+    width: '150px', 
+    height: '150px',
+    position: 'absolute',
+      top: '30%', 
+      zIndex: 10, 
+    },
   welcome: {
     fontFamily: "Open Sans",
     fontSize: "33.08px",
     fontWeight: 600,
     lineHeight: "66.15px",
     textAlign: "center",
-    marginBottom: "0rem", // Adjust margin bottom to reduce gap
+    marginBottom: "0rem", 
   },
   subtext: {
     fontFamily: "Open Sans",
