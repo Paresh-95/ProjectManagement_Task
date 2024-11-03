@@ -30,7 +30,7 @@ export const TaskProvider = ({ children }) => {
     };
 
     // Function to fetch tasks
-    const getTask = async (dueDate = "today") => {
+    const getTask = async (dueDate = "this_month") => {
         setLoading(true); // Set loading to true
         try {
             console.log("Fetching tasks with due date:", dueDate);
@@ -80,7 +80,7 @@ export const TaskProvider = ({ children }) => {
             console.error("Task Deletion Failed:", error);
             toast.error("Deleting Task Failed. Please try again.");
         } finally {
-            setLoading(false); // Reset loading state
+            setLoading(false); 
         }
     };
 
@@ -102,7 +102,7 @@ export const TaskProvider = ({ children }) => {
 
     // Fetch tasks when the provider mounts
     useEffect(() => {
-        getTask(); // Fetch tasks on mount
+        getTask("this_month"); // Fetch tasks on mount
     }, []);
 
     return (

@@ -40,14 +40,12 @@ export default function Register() {
     <div style={styles.container}>
       <div style={styles.leftPanel}>
         <div style={styles.astronautContainer}>
-          <img
-            src="/placeholder.svg?height=200&width=200"
-            alt="Astronaut"
-            style={styles.astronaut}
-          />
+          <div style={styles.logoBackground}>
+            <img src="/Group.png" alt="Group Logo" style={styles.astronaut} />
+          </div>
         </div>
         <h2 style={styles.welcome}>Welcome aboard my friend</h2>
-        <p style={styles.subtext}>Just a couple of clicks and we start</p>
+        <p style={styles.subtext}>just a couple of clicks and we start</p>
       </div>
       <div style={styles.rightPanel}>
         <form onSubmit={handleSubmit} style={styles.form}>

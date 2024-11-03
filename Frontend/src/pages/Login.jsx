@@ -105,18 +105,23 @@ const styles = {
     marginBottom: '2rem',
   },
   logoBackground: {
-    width: '304.58px',
-    height: '304.58px',
+    width: '200px', 
+    height: '200px',
     backgroundColor: '#317F8B',
-    borderRadius: '50%', // Makes it round
+    borderRadius: '50%',
     opacity: 0.6,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative', 
+    zIndex: 1,
   },
   astronaut: {
-    width: '150px',
+    width: '150px', 
     height: '150px',
+    position: 'absolute',
+    top: '30%', 
+    zIndex: 2, 
   },
   welcome: {
     fontFamily: 'Open Sans',
@@ -244,3 +249,4 @@ const styles = {
     fontSize: '1.3em',
   },
 };
+
