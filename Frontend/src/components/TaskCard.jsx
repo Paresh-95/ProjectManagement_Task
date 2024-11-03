@@ -31,6 +31,7 @@ export default function TaskCard({
   function handleDelete(){
     console.log(items._id);
     deleteTask(items._id)
+    
   };
 
 

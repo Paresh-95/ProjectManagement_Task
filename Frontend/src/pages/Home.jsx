@@ -12,7 +12,7 @@ import AddPeopleAttachment from "../components/AddPeopleAttachment";
 
 export default function Home() {
   const { createTask, getTask, task, addMemberToBoard } =
-  useContext(TaskContext);
+    useContext(TaskContext);
   const { user, getUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -22,6 +22,10 @@ export default function Home() {
   useEffect(() => {
     getTask();
   }, []);
+
+  const handleDueDate = (dueDateRange) => {
+    getTask(dueDateRange);   
+  };
 
   const [isAddPeopleOpen, setIsAddPeopleOpen] = useState(false);
 
@@ -71,10 +75,10 @@ export default function Home() {
           </button>
 
           <div style={styles.filterContainer}>
-            <select style={styles.filterSelect}>
+            <select  onChange={(e) => handleDueDate(e.target.value)} style={styles.filterSelect}>
               <option value="today">Today</option>
-              <option value="thisWeek">This Week</option>
-              <option value="thisMonth">This Month</option>
+              <option value="this_week">This Week</option>
+              <option value="this_month">This Month</option>
             </select>
           </div>
         </div>
@@ -110,7 +114,9 @@ export default function Home() {
                   0 ? (
                     task
                       .filter((item) => item.status === column.name)
-                      .map((item) => <TaskCard key={item.id} items={item} />)
+                      .map((item, index) => (
+                        <TaskCard key={index} items={item} />
+                      ))
                   ) : (
                     <div></div>
                   )}

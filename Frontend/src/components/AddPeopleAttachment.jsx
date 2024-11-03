@@ -73,7 +73,6 @@ export default function AddPeopleAttachment({
         width: '394px',
         height: '25px',
         padding: '0.6rem',
-        marginBottom: '1rem',
         border: '1px solid #ccc',
         borderRadius: '10px',
         marginBottom: '2rem',

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-// Import a date picker library (e.g., react-datepicker)
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserContext } from "../context/UserContext";
@@ -327,6 +326,7 @@ const styles = {
   },
   trashIcon: {
     fontSize: "16px",
+    color: "#E64833"
   },
 
   addTaskBtn: {
@@ -391,7 +391,5 @@ const styles = {
     height: "45px",
   },
 
-  trashIcon: {
-    color: "#E64833",
-  },
+
 };

@@ -1,31 +1,36 @@
 import React, { useContext, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-// Import a date picker library (e.g., react-datepicker)
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { UserContext } from "../context/UserContext";
 
-export default function EditTask({ isOpen, onClose, onSubmit,data }) {
-  
-  const {user} = useContext(UserContext);
+export default function EditTask({ isOpen, onClose, onSubmit, data }) {
+  const { user } = useContext(UserContext);
 
   const [title, setTitle] = useState(data.title);
   const [priority, setPriority] = useState(data.priority);
-  const [status,setStatus] = useState(data.status)
+  const [status, setStatus] = useState(data.status);
   const [assigneeTo, setAssigneeTo] = useState(data.assigneeTo);
-  const [checklist, setChecklist] = useState(data.checklist);
-  const [dueDate, setDueDate] = useState(data.dueDate);
+  const [checklist, setChecklist] = useState(
+    data.checklist.map(item => ({
+      ...item,
+      id: item.id || Math.random().toString(), // Ensure each item has a unique ID
+    }))
+  );
+  const [dueDate, setDueDate] = useState(data.dueDate || new Date());
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, priority, assigneeTo, checklist, dueDate });
+    onSubmit({ title, priority, status, assigneeTo, checklist, dueDate });
+    console.log({ title, priority, status, assigneeTo, checklist, dueDate });
+    
     onClose();
   };
 
   const addNewTask = () => {
-    setChecklist([
-      ...checklist,
+    setChecklist((prevChecklist) => [
+      ...prevChecklist,
       {
         id: Math.random().toString(),
         item: "Task to be done",
@@ -35,12 +40,22 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
   };
 
   const removeTask = (id) => {
-    setChecklist(checklist.filter((task) => task.id !== id));
+    setChecklist((prevChecklist) => prevChecklist.filter((task) => task.id !== id));
   };
 
-  const updateTask = (id, done) => {
-    setChecklist(
-      checklist.map((task) => (task.id === id ? { ...task, done } : task))
+  const updateTaskCompletion = (id, completed) => {
+    setChecklist((prevChecklist) =>
+      prevChecklist.map((task) =>
+        task.id === id ? { ...task, completed } : task
+      )
+    );
+  };
+
+  const updateTaskItem = (id, updatedItem) => {
+    setChecklist((prevChecklist) =>
+      prevChecklist.map((task) =>
+        task.id === id ? { ...task, item: updatedItem } : task
+      )
     );
   };
 
@@ -58,7 +73,7 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
               id="title"
               type="text"
               placeholder="Enter Task Title"
-              value={data.title}
+              value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
               style={styles.input}
@@ -77,8 +92,7 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
                   onClick={() => setPriority(level)}
                   style={{
                     ...styles.priorityOption,
-                    backgroundColor:
-                      priority === level ? "#EEECEC" : "transparent",
+                    backgroundColor: priority === level ? "#EEECEC" : "transparent",
                     color: "#767575",
                   }}
                 >
@@ -86,11 +100,7 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
                     style={{
                       ...styles.priorityDot,
                       backgroundColor:
-                        level === "High"
-                          ? "#FF2473"
-                          : level === "Moderate"
-                          ? "#18B0FF"
-                          : "#63C05B",
+                        level === "High" ? "#FF2473" : level === "Moderate" ? "#18B0FF" : "#63C05B",
                     }}
                   ></span>
                   {level} Priority
@@ -98,28 +108,28 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
               ))}
             </div>
           </div>
+
+          {/* Status Row */}
           <div style={{ ...styles.formGroup, ...styles.priorityRow }}>
-          <label style={styles.label}>
-              Select Priority <span style={styles.required}>*</span>
+            <label style={styles.label}>
+              Select Status <span style={styles.required}>*</span>
             </label>
-          <div style={styles.statusGroup}>
-              {["To-Do", "Done", "Backlog","In-Progress"].map((level) => (
+            <div style={styles.statusGroup}>
+              {["To-Do", "Done", "Backlog", "In-Progress"].map((level) => (
                 <div
                   key={level}
                   onClick={() => setStatus(level)}
                   style={{
                     ...styles.priorityOption,
-                    backgroundColor:
-                        status === level ? "#EEECEC" : "transparent",
+                    backgroundColor: status === level ? "#EEECEC" : "transparent",
                     color: "#767575",
                   }}
                 >
-                  
                   {level}
                 </div>
               ))}
             </div>
-            </div>
+          </div>
 
           {/* Assignee Row */}
           <div style={{ ...styles.formGroup, ...styles.inlineGroup }}>
@@ -128,7 +138,7 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
             </label>
             <select
               id="assignee"
-              value={data.assigneeTo}
+              value={assigneeTo}
               onChange={(e) => setAssigneeTo(e.target.value)}
               style={styles.inlineInput}
             >
@@ -146,57 +156,48 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
           {/* Checklist Section */}
           <div style={styles.formGroup}>
             <label style={styles.label}>
-              Checklist ({checklist.filter((t) => t.done).length}/
-              {checklist.length}) <span style={styles.required}>*</span>
+              Checklist ({checklist.filter((t) => t.completed).length}/{checklist.length})
+              <span style={styles.required}>*</span>
             </label>
             <div style={styles.checklistContainer}>
-              {data.checklist.map((task) => (
+              {checklist.map((task) => (
                 <div key={task.id} style={styles.checklistItem}>
                   <input
                     type="checkbox"
-                    checked={task.done}
-                    onChange={(e) => updateTask(task.id, e.target.checked)}
+                    checked={task.completed}
+                    onChange={(e) => updateTaskCompletion(task.id, e.target.checked)}
                     style={styles.checkbox}
                   />
                   <input
                     type="text"
                     value={task.item}
-                    onChange={(e) =>
-                      setChecklist(
-                        checklist.map((t) =>
-                          t.id === task.id ? { ...t, item: e.target.value } : t
-                        )
-                      )
-                    }
+                    onChange={(e) => updateTaskItem(task.id, e.target.value)}
                     style={styles.checklistInput}
                   />
                   <button
                     type="button"
                     onClick={() => removeTask(task.id)}
                     style={styles.removeButton}
+                    aria-label="Remove task"
                   >
                     <FaTrash style={styles.trashIcon} />
                   </button>
                 </div>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={addNewTask}
-              style={styles.addTaskBtn}
-            >
+            <button type="button" onClick={addNewTask} style={styles.addTaskBtn}>
               + Add New
             </button>
           </div>
 
+          {/* Date Selection */}
           <div style={styles.buttonGroup}>
-            {/* Select Due Date Button */}
             <button
               type="button"
               onClick={() => setCalendarOpen(!calendarOpen)}
               style={styles.dueDateBtn}
             >
-              {"Select Due Date"}
+              Select Due Date
             </button>
 
             <div style={styles.rightButtonGroup}>
@@ -215,7 +216,7 @@ export default function EditTask({ isOpen, onClose, onSubmit,data }) {
               selected={dueDate}
               onChange={(date) => {
                 setDueDate(date);
-                setCalendarOpen(false); // Close the calendar after selecting a date
+                setCalendarOpen(false);
               }}
               inline
             />
@@ -353,6 +354,7 @@ const styles = {
   },
   trashIcon: {
     fontSize: "16px",
+    color: "#E64833",
   },
 
   addTaskBtn: {
@@ -417,7 +419,5 @@ const styles = {
     height: "45px",
   },
 
-  trashIcon: {
-    color: "#E64833",
-  },
+
 };
