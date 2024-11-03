@@ -29,7 +29,7 @@ exports.signup = async(req,res)=>{
         }
 
         const user = await User.create({
-            name,email,password:hashedPassword
+            name,email,password:hashedPassword,boards:[]
         })
 
         return res.status(200).json({
