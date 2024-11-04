@@ -4,10 +4,6 @@ import React, { useContext, useEffect } from "react";
 import { Check, Box } from "lucide-react";
 import { TaskContext } from "../context/TaskContext";
 import { useParams } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
-import { Check, Box } from "lucide-react";
-import { TaskContext } from "../context/TaskContext";
-import { useParams } from "react-router-dom";
 
 const styles = {
   container: {
@@ -83,7 +79,6 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
   },
-
   taskText: {
     fontSize: "14px",
   },
@@ -111,6 +106,17 @@ const styles = {
     fontSize: "18px",
     color: "#4b5563",
   },
+  checkboxInput: {
+    width: "16px",
+    height: "16px",
+    marginRight: "8px",
+  },
+  checkboxChecked: {
+    backgroundColor: "#4caf50", // Example style for checked checkbox
+  },
+  checkIcon: {
+    color: "#fff", // Style for the check icon
+  },
 };
 
 export default function PublicPage() {
@@ -119,6 +125,12 @@ export default function PublicPage() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return { formattedDate: "Invalid Date", isPastDate: false };
+    }
+
     const today = new Date();
     const isPastDate = date < today;
     const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -136,34 +148,8 @@ export default function PublicPage() {
     return { formattedDate: `${formattedDate}${suffix}`, isPastDate };
   };
 
+  // Ensure share.dueDate is valid
   const dueDateInfo = share.dueDate ? formatDate(share.dueDate) : { formattedDate: "N/A", isPastDate: false };
-
-  useEffect(() => {
-    getTaskById(id);
-  }, []); 
-  const { id } = useParams();
-  const { share, getTaskById, loading } = useContext(TaskContext);
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const today = new Date();
-    const isPastDate = date < today;
-    const formattedDate = new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-    }).format(date);
-    const suffix =
-      date.getDate() % 10 === 1 && date.getDate() !== 11
-        ? "st"
-        : date.getDate() % 10 === 2 && date.getDate() !== 12
-        ? "nd"
-        : date.getDate() % 10 === 3 && date.getDate() !== 13
-        ? "rd"
-        : "th";
-    return { formattedDate: `${formattedDate}${suffix}`, isPastDate };
-  };
-
-  const { formattedDate, isPastDate } = formatDate(share.dueDate);
 
   useEffect(() => {
     getTaskById(id);
@@ -201,10 +187,7 @@ export default function PublicPage() {
                     <input
                       type="checkbox"
                       checked={task.completed}
-                      style={{
-                        ...styles.checkboxInput,
-                        ...(task.completed ? styles.checkboxChecked : {})
-                      }}
+                      style={styles.checkboxInput}
                       readOnly // Prevent user interaction
                     />
                     {task.completed && <Check style={styles.checkIcon} />}
@@ -218,47 +201,6 @@ export default function PublicPage() {
             <span style={styles.dueDateText}>Due Date</span>
             <button style={styles.dueDateButton}>
               {dueDateInfo.formattedDate}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-      {loading ? ( 
-        <div style={styles.loadingText}>Loading...</div>
-      ) : (
-        <div style={styles.card}>
-          <div style={styles.priorityWrapper}>
-            <div style={styles.priorityDot} />
-            <span style={styles.priorityText}>
-              {share.priority || "Priority"}
-            </span>{" "}
-
-          </div>
-          <h2 style={styles.title}>{share.title || "Task Title"}</h2>{" "}
-          <div>
-            <div style={styles.checklistHeader}>
-              <span style={styles.checklistCount}>
-                Checklist ({share.checklist?.length || 0}/12)
-              </span>
-            </div>
-
-            <div style={styles.taskList}>
-              {share.checklist?.map((task) => (
-                <label key={task._id} style={styles.taskItem}>
-                  <div style={styles.checkbox}>
-                    {task.completed}
-                  </div>
-                  <span style={styles.taskText}>{task.item}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-          <div style={styles.dueDateWrapper}>
-            <span style={styles.dueDateText}>Due Date</span>
-            <button style={styles.dueDateButton}>
-              {formattedDate || "Due Date"}
             </button>
           </div>
         </div>
