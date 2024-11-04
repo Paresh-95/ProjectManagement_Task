@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (userData) => {
     try {
       const registerUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/signup`;     
-      await axios.post(registerUrl, userData);
+      await axios.post(registerUrl, userData,{ withCredentials: true });
       setIsAuthenticated(true);
       toast.success("User Tegistered Successfully");
       navigate("/");
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (userCred) => {
     try {
       const loginUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/login`;  
-      const response = await axios.post(loginUrl, userCred); // Include credentials
+      const response = await axios.post(loginUrl, userCred,{ withCredentials: true }); // Include credentials
       
       setIsAuthenticated(true);
       toast.success("User Logged In Successfully");
