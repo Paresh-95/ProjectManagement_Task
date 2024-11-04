@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { MoreHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { TaskContext } from '../context/TaskContext';
 import EditTask from './EditTask';
+import toast from 'react-hot-toast';
 
 export default function TaskCard({ 
   items
@@ -58,6 +59,21 @@ export default function TaskCard({
 
   const { formattedDate, isPastDate } = formatDate(items.dueDate);
   
+
+  const copyLinkToClipboard = (iem) => {
+    const linkToCopy = `https://project-management-task-y2np.vercel.app//publicpage/${items._id}`; 
+    navigator.clipboard.writeText(linkToCopy)
+      .then(() => {
+        toast.success('Link copied to clipboard!');   
+      })
+      .catch(err => {
+        console.error('Could not copy text: ', err);
+        toast.error('Failed to copy link!'); 
+      });
+  };
+
+
+
 
   const styles = {
     card: {
@@ -239,7 +255,7 @@ export default function TaskCard({
           {isMenuOpen && (
             <div style={styles.menuDropdown}>
               <button style={styles.menuDropdownItem} onClick={() => setIsModalOpen(true) }>Edit</button>
-              <button style={styles.menuDropdownItem} onClick={() => setIsMenuOpen(false) }>Share</button>
+              <button style={styles.menuDropdownItem} onClick={copyLinkToClipboard}>Share</button>
               <button style={{ ...styles.menuDropdownItem, ...styles.deleteButton }} onClick={handleDelete}>Delete</button>
             </div>
           )}
@@ -261,7 +277,7 @@ export default function TaskCard({
         {isChecklistOpen && (
           <div style={styles.checklistItems}>
             {items.checklist.map((task) => (
-              <div key={task.id} style={styles.checklistItem}>
+              <div key={task._id} style={styles.checklistItem}>
                 <input
                   type="checkbox"
                   style={styles.checkbox}
