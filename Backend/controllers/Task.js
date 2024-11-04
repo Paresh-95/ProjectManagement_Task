@@ -149,7 +149,10 @@ exports.updateTask = async (req, res) => {
     const userId = req.user.id;
     const updateData = req.body;
 
+
     const task = await Task.findOne({ _id: TaskId, createdBy: userId });
+
+    
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -157,16 +160,17 @@ exports.updateTask = async (req, res) => {
       });
     }
 
-    if (updateData.title !== undefined) task.title = updateData.title;
+    if (updateData.title !== undefined) task.title = updateData.title
     if (updateData.description !== undefined)
       task.description = updateData.description;
-    if (updateData.priority !== undefined) task.priority = updateData.priority;
-    if (updateData.status !== undefined) task.status = updateData.status;
-    if (updateData.dueDate !== undefined) task.dueDate = updateData.dueDate;
-    if (updateData.assignedTo !== undefined)
-      task.assignedTo = updateData.assignedTo;
+    if (updateData.priority !== undefined) task.priority = updateData.priority
+    if (updateData.status !== undefined) task.status = updateData.status
+    if (updateData.dueDate !== undefined) task.dueDate = updateData.dueDate
+    if (updateData.assignedTo !== undefined) task.assignedTo = updateData.assignedTo
 
     const updatedTask = await task.save();
+
+    
 
     return res.status(200).json({
       success: true,
