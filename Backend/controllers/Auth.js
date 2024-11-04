@@ -4,51 +4,51 @@ const jwt = require("jsonwebtoken")
 require("dotenv").config();
 
 
-exports.signup = async (req, res) => {
+exports.signup = async(req,res)=>{
     try {
-        const { name, email, password, confirmPassword } = req.body;
-
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        const {name,email,password,confirmPassword} = req.body;
+        console.log({name,email,password,confirmPassword});
+        
+        const existingUser = await User.findOne({email})
+        if(existingUser){
             return res.status(400).json({
-                success: false,
-                message: "User Already Exists",
-            });
+                success:false,
+                message:"User Already Exists",
+            })
         }
 
         let hashedPassword;
-        try {
-            hashedPassword = await bcryptjs.hash(password, 10);
-        } catch (err) {
+        try{
+            hashedPassword = await bcryptjs.hash(password,10)
+        }
+        catch(err){
             return res.status(400).json({
-                success: false,
-                message: "Error while Hashing Password",
-            });
+                success:false,
+                message:"Error while Hashing Password",
+            })
         }
 
-        // Ensure boards is initialized
         const user = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            boards: [] // Initialize as an empty array
-        });
+            name,email,password:hashedPassword
+        })
 
         return res.status(200).json({
-            success: true,
-            message: "User Created Successfully",
-            data: user
-        });
+            success:true,
+            message:"User Created Successfully",
+            data:user
+        })
 
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
         return res.status(500).json({
-            success: false,
-            message: "Internal Server Error, cannot register User",
-            error: error.message
-        });
+            success:false,
+            message:"internal server error cannot register User",
+            error:error.message
+        })
     }
-};
+}
+
 
 
 exports.login = async (req,res) =>{
