@@ -17,7 +17,7 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>
           <Route path="/settings" element={<Settings />}></Route>
-          <Route path="/publicpage" element={<PublicPage/>}></Route>
+          <Route path="/publicpage/:id" element={<PublicPage/>}></Route>
 
         </Routes>
       </div>

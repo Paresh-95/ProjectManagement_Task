@@ -129,7 +129,7 @@ exports.getTasksById = async (req, res) => {
       });
     }
 
-    return res.status(404).json({
+    return res.status(200).json({
       success: true,
       message: "Task reterieved Successfully",
       task,
