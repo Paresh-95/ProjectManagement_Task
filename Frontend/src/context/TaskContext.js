@@ -89,7 +89,7 @@ export const TaskProvider = ({ children }) => {
         setLoading(true); // Set loading to true
         try {
             const addMemberUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/board/addMember`;
-            await axios.post(addMemberUrl, { email: memberEmail },);
+            await axios.post(addMemberUrl, { email: memberEmail }, { withCredentials: true });
             toast.success("Member Added Successfully to Board");
             navigate("/home");
         } catch (error) {
