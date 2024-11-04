@@ -100,10 +100,7 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
-    // Fetch tasks when the provider mounts
-    useEffect(() => {
-        getTask("this_month"); // Fetch tasks on mount
-    }, []);
+    
 
     return (
         <TaskContext.Provider value={{ task, loading, createTask, getTask, addMemberToBoard, deleteTask, updateTask }}>
