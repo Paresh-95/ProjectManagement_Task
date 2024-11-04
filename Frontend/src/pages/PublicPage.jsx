@@ -4,6 +4,10 @@ import React, { useContext, useEffect } from "react";
 import { Check, Box } from "lucide-react";
 import { TaskContext } from "../context/TaskContext";
 import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Check, Box } from "lucide-react";
+import { TaskContext } from "../context/TaskContext";
+import { useParams } from "react-router-dom";
 
 const styles = {
   container: {
@@ -79,32 +83,7 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
   },
-  checkbox: {
-    position: 'relative',
-    width: '16px',
-    height: '16px',
-  },
-  checkboxInput: {
-    width: '16px',
-    height: '16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '4px',
-    appearance: 'none',
-    cursor: 'pointer',
-  },
-  checkboxChecked: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6',
-  },
-  checkIcon: {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '16px',
-    height: '16px',
-    color: 'white',
-    pointerEvents: 'none',
-  },
+
   taskText: {
     fontSize: "14px",
   },
@@ -162,6 +141,33 @@ export default function PublicPage() {
   useEffect(() => {
     getTaskById(id);
   }, []); 
+  const { id } = useParams();
+  const { share, getTaskById, loading } = useContext(TaskContext);
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const isPastDate = date < today;
+    const formattedDate = new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+    }).format(date);
+    const suffix =
+      date.getDate() % 10 === 1 && date.getDate() !== 11
+        ? "st"
+        : date.getDate() % 10 === 2 && date.getDate() !== 12
+        ? "nd"
+        : date.getDate() % 10 === 3 && date.getDate() !== 13
+        ? "rd"
+        : "th";
+    return { formattedDate: `${formattedDate}${suffix}`, isPastDate };
+  };
+
+  const { formattedDate, isPastDate } = formatDate(share.dueDate);
+
+  useEffect(() => {
+    getTaskById(id);
+  }, []); 
 
   return (
     <div style={styles.container}>
@@ -212,6 +218,47 @@ export default function PublicPage() {
             <span style={styles.dueDateText}>Due Date</span>
             <button style={styles.dueDateButton}>
               {dueDateInfo.formattedDate}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+      {loading ? ( 
+        <div style={styles.loadingText}>Loading...</div>
+      ) : (
+        <div style={styles.card}>
+          <div style={styles.priorityWrapper}>
+            <div style={styles.priorityDot} />
+            <span style={styles.priorityText}>
+              {share.priority || "Priority"}
+            </span>{" "}
+
+          </div>
+          <h2 style={styles.title}>{share.title || "Task Title"}</h2>{" "}
+          <div>
+            <div style={styles.checklistHeader}>
+              <span style={styles.checklistCount}>
+                Checklist ({share.checklist?.length || 0}/12)
+              </span>
+            </div>
+
+            <div style={styles.taskList}>
+              {share.checklist?.map((task) => (
+                <label key={task._id} style={styles.taskItem}>
+                  <div style={styles.checkbox}>
+                    {task.completed}
+                  </div>
+                  <span style={styles.taskText}>{task.item}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div style={styles.dueDateWrapper}>
+            <span style={styles.dueDateText}>Due Date</span>
+            <button style={styles.dueDateButton}>
+              {formattedDate || "Due Date"}
             </button>
           </div>
         </div>
