@@ -6,14 +6,12 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   const signup = async (userData) => {
     try {
       const registerUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/signup`;     
       await axios.post(registerUrl, userData,{ withCredentials: true });
-      setIsAuthenticated(true);
       toast.success("User Tegistered Successfully");
       navigate("/");
     } catch (error) {
@@ -27,10 +25,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const loginUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/login`;  
       const response = await axios.post(loginUrl, userCred,{ withCredentials: true }); // Include credentials
-      
-      setIsAuthenticated(true);
       toast.success("User Logged In Successfully");
       navigate("/home");
+      
     } catch (error) {
       console.log("Login Failed: ", error.response?.data?.message || error.message);
       toast.error("Login failed: " + (error.response?.data?.message || "Something went wrong"));
@@ -42,7 +39,6 @@ export const AuthProvider = ({ children }) => {
       const logoutUrl = `${process.env.REACT_APP_BACKEND_API}/api/v1/auth/logout`;
       await axios.get(logoutUrl, { withCredentials: true }); // Include credentials
       toast.success("User Logged Out Successfully");
-      setIsAuthenticated(false);
       navigate("/");
     } catch (error) {
       console.log("Logout Failed: ", error.response?.data?.message || error.message);
@@ -51,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, signup, login, logout }}>
+    <AuthContext.Provider value={{ signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

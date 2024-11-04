@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   const handleDueDate = (dueDateRange) => {
-    getTask(dueDateRange);   
+    getTask(dueDateRange);
   };
 
   const [isAddPeopleOpen, setIsAddPeopleOpen] = useState(false);
@@ -75,10 +75,13 @@ export default function Home() {
           </button>
 
           <div style={styles.filterContainer}>
-            <select  onChange={(e) => handleDueDate(e.target.value)} style={styles.filterSelect}>
+            <select
+              onChange={(e) => handleDueDate(e.target.value)}
+              style={styles.filterSelect}
+            >
+              <option value="this_month">This Month</option>
               <option value="today">Today</option>
               <option value="this_week">This Week</option>
-              <option value="this_month">This Month</option>
             </select>
           </div>
         </div>
